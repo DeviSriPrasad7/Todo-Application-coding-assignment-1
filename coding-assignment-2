@@ -56,6 +56,12 @@ const checkTweet = (dbObject) => {
     dateTime: dbObject.date_time,
   };
 };
+//user following
+const checkFollowing = (dbObject) => {
+  return {
+    name: dbObject.name,
+  };
+};
 //api-1
 app.post("/register/", async (request, response) => {
   const { username, password, name, gender } = request.body;
@@ -111,4 +117,24 @@ app.get("/user/tweets/feed/", authenticateToken, async (request, response) => {
   const getUser = await db.all(getUserTweets);
   console.log(getUser);
   response.send(getUser.map((eachInfo) => checkTweet(eachInfo)));
+});
+///api-4
+app.get("/user/following/", authenticateToken, async (request, response) => {
+  const getUserFollowing = `
+    SELECT
+      *
+    FROM
+      user INNER JOIN follower ON user.user_id = follower.following_user_id;`;
+  const getUser = await db.all(getUserFollowing);
+  response.send(getUser.map((eachInfo) => checkFollowing(eachInfo)));
+});
+//api-5
+app.get("/user/follower/", authenticateToken, async (request, response) => {
+  const getUserFollowing = `
+    SELECT
+      *
+    FROM
+      user INNER JOIN follower ON user.user_id = follower.follower_user_id;`;
+  const getUser = await db.all(getUserFollowing);
+  response.send(getUser.map((eachInfo) => checkFollowing(eachInfo)));
 });
