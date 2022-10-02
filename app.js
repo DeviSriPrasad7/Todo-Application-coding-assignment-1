@@ -228,6 +228,7 @@ app.get("/todos/", async (request, response) => {
           todo LIKE '%${search_q}%';`;
       getTodo = await db.all(getTodosQuery);
       response.send(getTodo.map((eachTodo) => convertTodoDbObject(eachTodo)));
+      break;
     default:
       getTodosQuery = `
         SELECT
@@ -237,10 +238,6 @@ app.get("/todos/", async (request, response) => {
       getTodo = await db.all(getTodosQuery);
       response.send(getTodo.map((eachTodo) => convertTodoDbObject(eachTodo)));
   }
-  /*
-  const getTodo = await db.all(getTodosQuery);
-  response.send(getTodo.map((eachTodo) => convertTodoDbObject(eachTodo)));
-  */
 });
 //api-2
 app.get("/todos/:todoId/", async (request, response) => {
@@ -252,7 +249,7 @@ app.get("/todos/:todoId/", async (request, response) => {
       todo
     WHERE
       id = '${todoId}';`;
-  const getTodoId = await db.get(getTodoIdQuery);
+  const getTodoId = await db.get(getTodoQuery);
   response.send(convertTodoDbObject(getTodoId));
 });
 //api-3 ***
